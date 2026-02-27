@@ -1,0 +1,23 @@
+# Java
+target/
+*.log
+*.class
+
+# Node
+node_modules/
+.next/
+dist/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Env
+.env
+.env.local
+
+# Docker
+*.pid
