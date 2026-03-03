@@ -1,9 +1,12 @@
 package com.apnasahomestay.auth_service.domain.entity;
 
+import com.apnasahomestay.auth_service.domain.entity.property.Property;
+import com.apnasahomestay.auth_service.utility.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -36,4 +39,11 @@ public class AppUser {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
+    @ManyToMany(mappedBy = "coHosts")
+    private List<Property> coHostedProperties;
 }

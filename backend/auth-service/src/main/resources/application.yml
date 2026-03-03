@@ -30,5 +30,5 @@ management:
         include: health,info
 
 jwt:
-  secret: your-very-secure-secret-key-should-be-very-long-256-bit
+  secret: mysecretkeymysecretkeymysecretkey12345
   expiration: 3600000   # 1 hour in ms

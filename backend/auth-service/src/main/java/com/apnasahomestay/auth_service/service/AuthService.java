@@ -6,6 +6,7 @@ import com.apnasahomestay.auth_service.dto.LoginResponse;
 import com.apnasahomestay.auth_service.exception.EmailAlreadyExistsException;
 import com.apnasahomestay.auth_service.repository.UserRepository;
 import com.apnasahomestay.auth_service.security.JwtService;
+import com.apnasahomestay.auth_service.utility.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +33,14 @@ public class AuthService {
                 )
         );
 
-        String token = jwtService.generateToken(loginRequest.getUsername());
+        AppUser user = userRepository
+                .findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String token = jwtService.generateToken(
+                user.getUsername(),
+                user.getRole().name()
+        );
 
         return new LoginResponse(token);
     }
@@ -47,6 +55,7 @@ public class AuthService {
                 .username(username)
                 .email(email)
                 .passwordHash(passwordEncoder.encode(password))
+                .role(Role.USER)
                 .status("ACTIVE")
                 .emailVerified(false)
                 .createdAt(LocalDateTime.now())
