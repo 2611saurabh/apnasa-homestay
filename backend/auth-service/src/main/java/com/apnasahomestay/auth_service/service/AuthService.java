@@ -4,6 +4,7 @@ import com.apnasahomestay.auth_service.domain.entity.AppUser;
 import com.apnasahomestay.auth_service.dto.LoginRequest;
 import com.apnasahomestay.auth_service.dto.LoginResponse;
 import com.apnasahomestay.auth_service.exception.EmailAlreadyExistsException;
+import com.apnasahomestay.auth_service.exception.UsernameAlreadyExistsException;
 import com.apnasahomestay.auth_service.repository.UserRepository;
 import com.apnasahomestay.auth_service.security.JwtService;
 import com.apnasahomestay.auth_service.utility.Role;
@@ -49,6 +50,9 @@ public class AuthService {
 
         if (userRepository.findByEmail(email).isPresent()) {
             throw new EmailAlreadyExistsException("Email already exists");
+        }
+        if(userRepository.findByUsername(username).isPresent()){
+            throw new UsernameAlreadyExistsException("Username already exists");
         }
 
         AppUser user = AppUser.builder()

@@ -1,9 +1,9 @@
 package com.apnasahomestay.auth_service.controller;
 
-import com.apnasahomestay.auth_service.dto.LoginRequest;
-import com.apnasahomestay.auth_service.dto.LoginResponse;
-import com.apnasahomestay.auth_service.dto.RegisterRequest;
+import com.apnasahomestay.auth_service.dto.*;
 import com.apnasahomestay.auth_service.service.AuthService;
+import com.apnasahomestay.auth_service.service.PasswordResetService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +14,30 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetService passwordResetService;
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(
+            @RequestBody ForgotPasswordRequest request) {
+
+        passwordResetService.forgotPassword(request.getEmail());
+
+        return ResponseEntity.ok("Password reset email sent");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(
+            @RequestBody ResetPasswordRequest request) {
+
+        passwordResetService.resetPassword(
+                request.getToken(),
+                request.getNewPassword()
+        );
+
+        return ResponseEntity.ok("Password reset successful");
+    }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
         authService.register(request.getUsername(), request.getEmail(), request.getPassword());
         return ResponseEntity.ok("User registered successfully");
     }
@@ -26,6 +47,7 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
+
 
     @GetMapping("/test")
     public String test(){

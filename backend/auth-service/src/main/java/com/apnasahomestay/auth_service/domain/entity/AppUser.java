@@ -1,6 +1,5 @@
 package com.apnasahomestay.auth_service.domain.entity;
 
-import com.apnasahomestay.auth_service.domain.entity.property.Property;
 import com.apnasahomestay.auth_service.utility.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,6 +43,5 @@ public class AppUser {
     @Column(nullable = false)
     private Role role;
 
-    @ManyToMany(mappedBy = "coHosts")
-    private List<Property> coHostedProperties;
+
 }
